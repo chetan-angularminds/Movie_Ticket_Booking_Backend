@@ -1,6 +1,7 @@
 const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
+const { execSync } = require('child_process');
 
 // Configuration
 const fileListUrl = 'https://movie-ticket-booking-backend-mjx1.onrender.com/static/posters/list';
@@ -53,6 +54,18 @@ const downloadFile = async (filename) => {
   }
 };
 
+// Function to commit the changes
+const commitChanges = async () => {
+  try {
+    execSync('git add static/posters'); // Stage changes
+    execSync('git commit -m "Updated images in static/posters"'); // Commit with a message
+    console.log('Changes committed successfully!');
+  } catch (error) {
+    console.error('Error committing changes:', error.message);
+    process.exit(1);
+  }
+};
+
 // Main function
 const syncImages = async () => {
   try {
@@ -70,8 +83,11 @@ const syncImages = async () => {
     }
 
     console.log('All files downloaded successfully!');
+
+    // Commit changes after download
+    await commitChanges();
   } catch (error) {
-    console.error('Error during sync:', error.message);
+    console.error('Error during sync:', error);
   }
 };
 

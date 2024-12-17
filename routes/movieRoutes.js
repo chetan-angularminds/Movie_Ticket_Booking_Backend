@@ -52,7 +52,7 @@ router.post("/", upload.single("poster"), async (req, res) => {
       language: Array.isArray(req.body.language)
         ? req.body.language
         : JSON.parse(req.body.language.replace(/'/g, '"')), // Convert to array
-      poster: `http://localhost:${process.env.PORT}/static/posters/${req.file.filename}`, // Store the poster's URL
+      poster: `https://movie-ticket-booking-backend-mjx1.onrender.com/static/posters/${req.file.filename}`, // Store the poster's URL
     };
 
     const movie = new Movie(movieData);
