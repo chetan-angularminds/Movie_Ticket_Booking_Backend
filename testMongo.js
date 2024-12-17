@@ -16,6 +16,8 @@ async function testConnection() {
   } finally {
     // Ensure the client closes
     await client.close();
+    console.log("hello done");
+    
   }
 }
 
