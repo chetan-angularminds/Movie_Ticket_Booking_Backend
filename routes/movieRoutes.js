@@ -181,7 +181,7 @@ router.patch("/:movieId", upload.single("poster"), async (req, res) => {
     });
 
     if (req.file) {
-      movie.poster = `http://localhost:${process.env.PORT}/static/posters/${req.file.filename}`;
+      movie.poster = `https://movie-ticket-booking-backend-mjx1.onrender.com/static/posters/${req.file.filename}`;
     }
 
     await movie.save();

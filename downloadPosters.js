@@ -54,8 +54,24 @@ const downloadFile = async (filename) => {
   }
 };
 
+// Function to check if there are changes to commit
+const hasChangesToCommit = () => {
+  try {
+    const diffOutput = execSync('git diff --stat').toString();
+    return diffOutput.includes('static/posters'); // Check if there are changes in the posters directory
+  } catch (error) {
+    console.error('Error checking for changes:', error);
+    return false;
+  }
+};
+
 // Function to commit the changes
 const commitChanges = async () => {
+  if (!hasChangesToCommit()) {
+    console.log('No changes to commit.');
+    return;
+  }
+
   try {
     execSync('git add static/posters'); // Stage changes
     execSync('git commit -m "Updated images in static/posters"'); // Commit with a message
