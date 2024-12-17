@@ -5,7 +5,7 @@ const path = require('path');
 // Configuration
 const fileListUrl = 'https://movie-ticket-booking-backend-mjx1.onrender.com/static/posters/list';
 const fileBaseUrl = 'https://movie-ticket-booking-backend-mjx1.onrender.com/static/posters';
-const localDir = path.join(__dirname, 'posters'); // Local folder to store images
+const localDir = path.join(__dirname, 'static/posters'); // Local folder to store images
 
 // Ensure the local directory exists
 if (!fs.existsSync(localDir)) {
