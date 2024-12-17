@@ -175,7 +175,16 @@ router.get('/all/movie/:movieId', async (req, res) => {
     res.status(500).send(error);
   }
 });
-
+router.get('/all/theater/:theaterId/movie/:movieId', async (req, res) => {
+  try {
+    const shows = await BulkShow.find({ movie: req.params.movieId, theaters: req.params.theaterId })
+      .populate('theaters')
+      .populate('movie', 'title');
+    res.send(shows);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
 // Helper function to create individual shows from a bulk show
 async function createIndividualShows(bulkShow) {
   const { movie, theaters,seatPrice, startDate, endDate } = bulkShow;
