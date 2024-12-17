@@ -133,8 +133,8 @@ router.get('/movie/:movieId', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const show = await Show.findById(req.params.id)
-      .populate('theater', 'name address seatsCapacity numberOfRows seatsPerRow')
-      .populate('movie', 'title duration');
+      .populate('theater')
+      .populate('movie');
     if (!show) {
       return res.status(404).send();
     }
