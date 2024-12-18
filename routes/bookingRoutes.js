@@ -102,10 +102,16 @@ router.get('/:Id', async (req, res) => {
       .populate({
         path: 'show',
         select: 'showTime date',
-        populate: {
-          path: 'movie theater',
-          select: 'title name'
-        }
+        populate: [
+          {
+            path: 'movie',
+            select: '' // This selects all fields for the movie
+          },
+          {
+            path: 'theater',
+            select: '' // This selects all fields for the theater
+          }
+        ]
       });
     res.send(bookings);
   } catch (error) {
@@ -123,7 +129,7 @@ router.post('/booking/email', async (req, res) => {
         select: 'showTime date',
         populate: {
           path: 'movie theater',
-          select: 'title name'
+          select: 'title name city address'
         }
       });
     res.send(bookings);
