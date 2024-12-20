@@ -75,6 +75,7 @@ const commitChanges = async () => {
   try {
     execSync('git add static/posters'); // Stage changes
     execSync('git commit -m "Updated images in static/posters"'); // Commit with a message
+    execSync('git push origin main'); // Commit with a message
     console.log('Changes committed successfully!');
   } catch (error) {
     console.error('Error committing changes:', error.message);
