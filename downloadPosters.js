@@ -6,7 +6,7 @@ const { execSync } = require('child_process');
 // Configuration
 const fileListUrl = 'https://movie-ticket-booking-backend-mjx1.onrender.com/static/posters/list';
 const fileBaseUrl = 'https://movie-ticket-booking-backend-mjx1.onrender.com/static/posters';
-const localDir = path.join(__dirname, 'static/posters'); // Local folder to store images
+const localDir = path.join(__dirname, 'static/posters');
 
 // Ensure the local directory exists
 if (!fs.existsSync(localDir)) {
@@ -17,7 +17,7 @@ if (!fs.existsSync(localDir)) {
 const fetchFileList = async () => {
   try {
     const response = await axios.get(fileListUrl);
-    return response.data; // List of files
+    return response.data;
   } catch (error) {
     console.error('Error fetching file list:', error.message);
     process.exit(1);
@@ -58,7 +58,7 @@ const downloadFile = async (filename) => {
 const hasChangesToCommit = () => {
   try {
     const diffOutput = execSync('git diff --stat').toString();
-    return diffOutput.includes('static/posters'); // Check if there are changes in the posters directory
+    return diffOutput.includes('static/posters');
   } catch (error) {
     console.error('Error checking for changes:', error);
     return false;
@@ -69,16 +69,27 @@ const hasChangesToCommit = () => {
 const commitChanges = async () => {
   if (!hasChangesToCommit()) {
     console.log('No changes to commit.');
-    return;
+    return false;
   }
 
   try {
-    execSync('git add static/posters'); // Stage changes
-    execSync('git commit -m "Updated images in static/posters"'); // Commit with a message
-    execSync('git push origin main'); // Commit with a message
+    execSync('git add static/posters');
+    execSync('git commit -m "Updated images in static/posters [ci skip]"');
     console.log('Changes committed successfully!');
+    return true;
   } catch (error) {
-    console.error('Error committing changes:', error.message);
+    console.error('Error committing changes:', error);
+    process.exit(1);
+  }
+};
+
+// Function to push changes
+const pushChanges = async () => {
+  try {
+    execSync('git push');
+    console.log('Changes pushed to remote repository!');
+  } catch (error) {
+    console.error('Error pushing changes:', error);
     process.exit(1);
   }
 };
@@ -102,7 +113,14 @@ const syncImages = async () => {
     console.log('All files downloaded successfully!');
 
     // Commit changes after download
-    await commitChanges();
+    const committed = await commitChanges();
+
+    // Push the changes only if a commit was made
+    if (committed) {
+      await pushChanges();
+    } else {
+      console.log('No changes to push.');
+    }
   } catch (error) {
     console.error('Error during sync:', error);
   }
